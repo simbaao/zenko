@@ -4,9 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title> Zenko </title>
+    <title>Atendente Virtual - [NOME DA ACADEMIA]</title>
 
     <style>
+        /* PALETA (altere aqui para trocar as cores do chat inteiro) */
+
+        :root {
+            --primary: #ff5a1f;
+            --primary-dark: #d94410;
+            --header-start: #1f2328;
+            --header-end: #353b43;
+            --page-start: #1f2328;
+            --page-end: #4a525c;
+            --chat-bg: #f4f5f7;
+            --online: #4caf50;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -16,7 +29,7 @@
 
         body {
             min-height: 100vh;
-            background: linear-gradient(135deg, #8917d9, #7411c6);
+            background: linear-gradient(135deg, var(--page-start), var(--page-end));
             display: flex;
             align-items: center;
             justify-content: center;
@@ -27,10 +40,10 @@
             width: 100%;
             max-width: 430px;
             height: 700px;
-            background: #7411c6;
+            background: #ffffff;
             border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
             display: flex;
             flex-direction: column;
         }
@@ -38,24 +51,26 @@
         /* CABEÇALHO */
 
         .chat-header {
-            background: linear-gradient(135deg, #5f0cb4);
+            background: linear-gradient(135deg, var(--header-start), var(--header-end));
             color: white;
             padding: 20px;
             display: flex;
             align-items: center;
             gap: 14px;
+            border-bottom: 3px solid var(--primary);
         }
 
-        .school-icon {
+        .gym-icon {
             width: 48px;
             height: 48px;
-            background: purple;
-            color: #1565c0;
+            background: var(--primary);
+            color: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 24px;
+            flex-shrink: 0;
         }
 
         .header-info h2 {
@@ -72,7 +87,7 @@
             display: inline-block;
             width: 8px;
             height: 8px;
-            background: #4caf50;
+            background: var(--online);
             border-radius: 50%;
             margin-right: 5px;
         }
@@ -83,7 +98,7 @@
             flex: 1;
             padding: 20px;
             overflow-y: auto;
-            background: #5f0cb4;
+            background: var(--chat-bg);
         }
 
         .message {
@@ -105,6 +120,7 @@
             border-radius: 15px;
             font-size: 14px;
             line-height: 1.5;
+            overflow-wrap: anywhere;
         }
 
         .bot .message-content {
@@ -115,7 +131,7 @@
         }
 
         .user .message-content {
-            background: #1976d2;
+            background: var(--primary);
             color: white;
             border-bottom-right-radius: 4px;
         }
@@ -148,18 +164,19 @@
         }
 
         .option {
-            border: 1px solid #1976d2;
+            border: 1px solid var(--primary);
             background: white;
-            color: #1976d2;
+            color: var(--primary-dark);
             padding: 8px 11px;
             border-radius: 20px;
             cursor: pointer;
             font-size: 12px;
+            white-space: nowrap;
             transition: 0.2s;
         }
 
         .option:hover {
-            background: #1976d2;
+            background: var(--primary);
             color: white;
         }
 
@@ -176,6 +193,7 @@
 
         .chat-input input {
             flex: 1;
+            min-width: 0;
             border: none;
             outline: none;
             background: #f1f3f6;
@@ -189,15 +207,16 @@
             height: 45px;
             border: none;
             border-radius: 50%;
-            background: #35008e;
-            color: purple;
+            background: var(--primary);
+            color: white;
             cursor: pointer;
             font-size: 18px;
+            flex-shrink: 0;
             transition: 0.2s;
         }
 
         .send-button:hover {
-            background: #0d47a1;
+            background: var(--primary-dark);
             transform: scale(1.05);
         }
 
@@ -208,7 +227,7 @@
             font-size: 12px;
             color: #777;
             padding: 0 20px 8px;
-            background: #f5f7fb;
+            background: var(--chat-bg);
         }
 
         /* RESPONSIVO */
@@ -221,7 +240,12 @@
 
             .chat-container {
                 height: 100vh;
+                height: 100dvh;
                 border-radius: 0;
+            }
+
+            .quick-options {
+                padding: 10px 15px;
             }
         }
     </style>
@@ -234,16 +258,16 @@
     <!-- CABEÇALHO -->
     <div class="chat-header">
 
-        <div class="school-icon">
-            🉐
+        <div class="gym-icon">
+            🏋️
         </div>
 
         <div class="header-info">
-            <h2>Atendente Zenko</h2>
+            <h2>Atendente Virtual</h2>
 
             <div class="status">
                 <span class="online"></span>
-                Online • Zenko
+                Online • dark iron
             </div>
         </div>
 
@@ -257,17 +281,17 @@
 
             <div class="message-content">
 
-                Olá! 👋
+                <span id="greeting">Olá</span>! 👋
 
                 <br><br>
 
-                Seja bem-vindo(a) ao atendimento virtual da Zenko.
+                Seja bem-vindo(a) ao atendimento virtual da <strong>dark iron</strong>.
 
                 <br><br>
 
-                Como posso ajudar você?
+                Pronto(a) para começar? Como posso ajudar você?
 
-                <span class="time">16:08</span>
+                <span class="time" data-auto-time></span>
 
             </div>
 
@@ -282,14 +306,14 @@
 
                 <br><br>
 
-                📚 Cursos e disciplinas<br>
+                🏋️ Modalidades e aulas<br>
                 📝 Matrícula<br>
                 📅 Horário de funcionamento<br>
-                💰 Mensalidades<br>
+                💰 Mensalidades e planos<br>
                 📍 Localização<br>
                 📞 Contato
 
-                <span class="time">16:08</span>
+                <span class="time" data-auto-time></span>
 
             </div>
 
@@ -315,16 +339,24 @@
                 📝 Matrícula
             </button>
 
-            <button class="option" onclick="quickMessage('Quais cursos estão disponíveis?')">
-                📚 Cursos
+            <button class="option" onclick="quickMessage('Quais modalidades estão disponíveis?')">
+                🏋️ Modalidades
             </button>
 
-            <button class="option" onclick="quickMessage('Quais são os horários das aulas?')">
+            <button class="option" onclick="quickMessage('Qual o horário de funcionamento?')">
                 📅 Horários
             </button>
 
-            <button class="option" onclick="quickMessage('Qual o valor da mensalidade?')">
+            <button class="option" onclick="quickMessage('Quais são os planos e mensalidades?')">
                 💰 Mensalidade
+            </button>
+
+            <button class="option" onclick="quickMessage('Onde fica a academia?')">
+                📍 Localização
+            </button>
+
+            <button class="option" onclick="quickMessage('Quais são os contatos da academia?')">
+                📞 Contato
             </button>
 
         </div>
@@ -365,6 +397,68 @@
     }
 
 
+    function getGreeting() {
+
+        const hour = new Date().getHours();
+
+        if (hour < 12) {
+            return "Bom dia";
+        }
+
+        if (hour < 18) {
+            return "Boa tarde";
+        }
+
+        return "Boa noite";
+
+    }
+
+
+    /* Remove acentos e deixa tudo em minúsculas para comparar palavras-chave */
+    function normalize(text) {
+
+        return text
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .trim();
+
+    }
+
+
+    /* Evita que o texto digitado seja interpretado como HTML */
+    function escapeHTML(text) {
+
+        return text
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+
+    }
+
+
+    /*
+       Verifica se a mensagem contém alguma palavra-chave.
+       - padrão: a palavra deve começar na palavra-chave (plano -> planos)
+       - exact = true: a palavra deve ser exatamente a palavra-chave (oi)
+    */
+    function hasAny(message, keywords, exact = false) {
+
+        return keywords.some(keyword => {
+
+            const pattern = exact
+                ? "\\b" + keyword + "\\b"
+                : "\\b" + keyword;
+
+            return new RegExp(pattern).test(message);
+
+        });
+
+    }
+
+
     function addMessage(text, type) {
 
         const chat = document.getElementById("chatMessages");
@@ -373,9 +467,11 @@
 
         message.classList.add("message", type);
 
+        const content = type === "user" ? escapeHTML(text) : text;
+
         message.innerHTML = `
             <div class="message-content">
-                ${text}
+                ${content}
                 <span class="time">${getTime()}</span>
             </div>
         `;
@@ -427,114 +523,160 @@
 
             let response = "";
 
-            const message = text.toLowerCase();
+            const message = normalize(text);
 
+
+            /* A ordem importa: respostas mais específicas vêm primeiro */
 
             if (
-                message.includes("matrícula") ||
-                message.includes("matricula")
+                hasAny(message, [
+                    "contato", "telefone", "whatsapp", "zap",
+                    "email", "e-mail", "ligar", "falar com"
+                ])
             ) {
 
                 response = `
-                    📝 <strong>Matrículas</strong><br><br>
+                    📞 <strong>Contato</strong><br><br>
 
-                    Para realizar sua matrícula, é necessário
-                    apresentar os documentos solicitados pela escola.
+                    Fale com a nossa recepção pelos canais abaixo:
 
                     <br><br>
 
-                    Posso informar os documentos necessários ou
-                    encaminhar você para a secretaria.
+                    Telefone: 14997600897<br>
+                    WhatsApp: 14997600897
                 `;
 
             }
 
             else if (
-                message.includes("curso") ||
-                message.includes("disciplina")
+                hasAny(message, [
+                    "matricula", "matricular", "inscricao", "inscrever",
+                    "experimental", "avaliacao fisica", "adesao"
+                ])
             ) {
 
                 response = `
-                    📚 <strong>Cursos disponíveis</strong><br><br>
+                    📝 <strong>Matrícula</strong><br><br>
 
-                    Atualmente temos cursos nas áreas de
-                    Administração, Informática, Tecnologia e
-                    Desenvolvimento Profissional.
+                    Para se matricular, é só ir até a recepção com um
+                    documento oficial com foto.
 
                     <br><br>
 
-                    Digite o nome do curso para receber mais informações.
+                    Documentos necessários: RG<br>
+                    Taxa de adesão: 50$<br>
+                    Aula experimental: 20$<br>
+                    Avaliação física: 30$
+
+                    <br><br>
+
+                    Posso passar os contatos da recepção para você agendar.
                 `;
 
             }
 
             else if (
-                message.includes("horário") ||
-                message.includes("horario") ||
-                message.includes("aula")
+                hasAny(message, [
+                    "mensalidade", "plano", "preco", "valor",
+                    "quanto custa", "desconto"
+                ])
             ) {
 
                 response = `
-                    📅 <strong>Horários</strong><br><br>
+                    💰 <strong>Mensalidades e planos</strong><br><br>
 
-                    As aulas acontecem de segunda a sexta-feira.
+                    Temos planos para cada objetivo e rotina:
 
                     <br><br>
 
-                    Manhã: 08:00 às 12:00<br>
-                    Tarde: 13:00 às 17:00<br>
-                    Noite: 19:00 às 22:00
+                    Mensal: 100$<br>
+                    Trimestral: 250$<br>
+                    Semestral: 450$<br>
+                    Anual: 800$
+
+                    <br><br>
+
+                    Quanto maior o plano, maior a economia. Fale com a
+                    recepção para conhecer as condições.
                 `;
 
             }
 
             else if (
-                message.includes("mensalidade") ||
-                message.includes("preço") ||
-                message.includes("valor")
+                hasAny(message, [
+                    "horario", "funcionamento", "funciona", "aberto",
+                    "abre", "fecha", "que horas"
+                ])
             ) {
 
                 response = `
-                    💰 <strong>Mensalidades</strong><br><br>
+                    📅 <strong>Horário de funcionamento</strong><br><br>
 
-                    O valor da mensalidade depende do curso
-                    escolhido.
+                    Segunda a sexta: 8 as 22<br>
+                    Sábado: 8 as 18<br>
+                    Domingo e feriados: 8 as 14
 
                     <br><br>
 
-                    Informe o curso que deseja consultar
-                    para receber o valor correspondente.
+                    Os horários de cada aula coletiva podem variar.
+                    Consulte a recepção para a grade completa.
                 `;
 
             }
 
             else if (
-                message.includes("local") ||
-                message.includes("endereço") ||
-                message.includes("endereco")
+                hasAny(message, [
+                    "local", "endereco", "onde fica", "como chegar", "mapa"
+                ])
             ) {
 
                 response = `
                     📍 <strong>Localização</strong><br><br>
 
-                    Nossa escola está localizada na região central
-                    da cidade.
+                    Endereço: Rua belterro 291
 
                     <br><br>
 
-                    Para visualizar o endereço completo,
-                    entre em contato com nossa secretaria.
+                    Esperamos você por aqui! 💪
                 `;
 
             }
 
             else if (
-                message.includes("oi") ||
-                message.includes("olá") ||
-                message.includes("ola") ||
-                message.includes("bom dia") ||
-                message.includes("boa tarde") ||
-                message.includes("boa noite")
+                hasAny(message, [
+                    "modalidade", "aula", "treino", "musculacao",
+                    "spinning", "funcional", "pilates", "danca", "luta"
+                ])
+            ) {
+
+                response = `
+                    🏋️ <strong>Modalidades e aulas</strong><br><br>
+
+                    Oferecemos treinos para todos os níveis, como:
+
+                    <br><br>
+
+                    Musculação<br>
+                    Spinning<br>
+                    Funcional<br>
+                    Pilates<br>
+                    Dança<br>
+                    Lutas
+
+                    <br><br>
+
+                    [PREENCHER: confirme a lista de modalidades]
+
+                    <br><br>
+
+                    Digite o nome da modalidade para saber mais.
+                `;
+
+            }
+
+            else if (
+                hasAny(message, ["oi", "ola", "opa", "e ai"], true) ||
+                hasAny(message, ["bom dia", "boa tarde", "boa noite"], true)
             ) {
 
                 response = `
@@ -546,7 +688,7 @@
 
                     <br><br>
 
-                    Como posso ajudar?
+                    Como posso ajudar no seu treino de hoje?
                 `;
 
             }
@@ -564,8 +706,8 @@
                     <br><br>
 
                     Você pode perguntar sobre
-                    <strong>matrícula, cursos, horários,
-                    mensalidades ou localização</strong>.
+                    <strong>modalidades, matrícula, horários,
+                    mensalidades, localização ou contato</strong>.
                 `;
 
             }
@@ -586,6 +728,20 @@
         }
 
     }
+
+
+    /* Preenche saudação e horário das mensagens iniciais */
+    function initChat() {
+
+        document.getElementById("greeting").textContent = getGreeting();
+
+        document.querySelectorAll("[data-auto-time]").forEach(element => {
+            element.textContent = getTime();
+        });
+
+    }
+
+    initChat();
 
 </script>
 
